@@ -11,8 +11,6 @@ async function getDb() {
 }
 
 export async function initDB() {
-    let db;
-    
     try {
         db = await getDb();
 
@@ -57,9 +55,6 @@ export async function initDB() {
 }
 
 export async function resetDB() {
-    const db = await getDb();
-    db.closeAsync();
-    
     try {
         await SQLite.deleteDatabaseAsync('pokemon_app');
         console.log('Databáze pokemon_app smazána');
@@ -69,6 +64,7 @@ export async function resetDB() {
     }
 
     // fallback: drop tabulky a indexy
+    const db = await getDb();
     await db.execAsync(`
         DROP INDEX IF EXISTS idx_pokemon_url_unique;
         DROP TABLE IF EXISTS pokemon;
@@ -79,32 +75,30 @@ export async function resetDB() {
 }
 
 export async function insertPokemons(data) {
-  try {
-    const db = await getDb();
-    const stmt = await db.prepareAsync('INSERT OR IGNORE INTO pokemon (name, url) VALUES (?, ?)');
-    
-    let count = 0;
-    for (const item of data.results) {
-      await stmt.executeAsync([item.name, item.url]);
-      count++;
-    }
-    
-    console.log(`Vloženo ${count} pokemonů do databáze`);
-    await stmt.finalizeAsync();
-  } catch (error) {
-    console.error('Chyba při vkládání pokemonů:', error);
+  const db = await getDb();
+  const stmt = await db.prepareAsync('INSERT INTO pokemon (name, url) VALUES (?, ?)');
+  for (const item of data) {
+      await stmt.executeAsync([
+          item.name,
+          item.url,
+      ]);
   }
+  console.log(result);
+
 }
 
 export async function selectPokemonsAll() {
+    let db;
+    
     try {
-        const db = await getDb();
+        db = await getDb();
+        console.log('Hledám všechny pokemony');
         const rows = await db.getAllAsync('SELECT * FROM pokemon');
-        console.log(`Načteno ${rows.length} pokemonů z databáze`);
-        return rows;
-    } catch (error) {
-        console.error('Chyba při načítání pokemonů:', error);
-        return [];
+        console.log(`Nalezeno ${rows.length} pokemonů:`, rows);
+        return { success: true, data: rows };
+    } catch (e) {
+        console.error('selectPokemonsAll error:', e);
+        return { success: false, error: e.message, data: [] };
     }
 }
 
