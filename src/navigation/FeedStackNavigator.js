@@ -24,12 +24,12 @@ export default function FeedStackNavigator() {
           <Stack.Screen 
             name="FeedList" 
             component={FeedScreen}
-            options={{ title: 'RSS Feedy' }}
+            options={{ title: 'Pokemon' }}
           />
             <Stack.Screen 
                 name="ContentScreen" 
                 component={ContentScreen}
-                options={{ title: 'Obsah' }}
+                options={{ title: 'Detaily' }}
             />
         </Stack.Navigator>
       </UpdateProvider>

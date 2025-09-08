@@ -8,8 +8,8 @@ import { initDB } from './src/db/db';
 import { UpdateProvider } from './src/services/UpdateService';
 
 export default function App() {
-  // na této stránce bude proběhne aktualizace jednotlivých zpráv na dostupných feedech
-  // testovací funkce - zatím init
+
+  // init databáze
   useEffect(() => {
     const initFetch = async() => {
       await initDB();

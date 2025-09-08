@@ -8,18 +8,11 @@ import { useUpdateService } from '../services/UpdateService';
 export default function HomeScreen() {
   const { isUpdating, lastUpdate, nextUpdate, updateInterval } = useUpdateService();
 
-  useEffect(() => {
-    (async () => {
-      console.log("Adding content");
-      await addContent(1);
-    })();
-  }, []);
-
   return (
     <View style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.title}>Domů</Text>
-        <Text style={styles.subtitle}>Vítejte v RSS aplikaci</Text>
+        <Text style={styles.subtitle}>Vítejte v Pokedex aplikaci!</Text>
         <TouchableOpacity style={styles.button} onPress={() => resetDB()}>
           <Text style={styles.buttonText}>RESETOVAT DB</Text>
         </TouchableOpacity>

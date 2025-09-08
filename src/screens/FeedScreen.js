@@ -1,10 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import Colors from '../constants/Colors';
-import { getFeeds, addContent } from '../db/db';
 import { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-
 import { getPokemons } from '../api/fetchAPI';
 import { insertPokemons, selectPokemonsAll } from '../db/db';
 
@@ -17,10 +15,15 @@ export default function FeedScreen() {
     // data z API
     const apiData = await getPokemons();
     console.log("API data:", apiData);
-    // uložit do databáze
+    // uložit do databáze - pro případné roizšíření
     await insertPokemons(apiData);
     // načíst z databáze a zobrazit
+    console.log("Fetch z DB...")
     const pokemonsFromDb = await selectPokemonsAll();
+    //console.log("DB", pokemonsFromDb);
+
+
+
     setFeeds(pokemonsFromDb);
   }
 

@@ -1,5 +1,5 @@
 import { getPokemons } from '../api/fetchAPI';
-import { insertPokemons } from '../db/db';
+import { insertPokemons, insertDetails } from '../db/db';
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useCallback } from 'react';
 
@@ -8,7 +8,7 @@ const UpdateContext = createContext();
 export const UpdateProvider = ({ children }) => {
     const [isUpdating, setIsUpdating] = useState(false);
     const [lastUpdate, setLastUpdate] = useState(new Date());
-    const [updateInterval, setUpdateInterval] = useState(100000);
+    const [updateInterval, setUpdateInterval] = useState(10000);
 
     const [nextUpdate, setNextUpdate] = useState(null);
 
@@ -26,12 +26,14 @@ export const UpdateProvider = ({ children }) => {
     }, [isUpdating, calcNextUpdate]);
 
 
-    
+    // funkce do update service 
     const getData = async () => {
         console.log("UpdateService: Stahuji pokemony...")
     
         const apiData = await getPokemons();
         await insertPokemons(apiData);
+        await insertDetails();
+
     }
 
     // Spuštění automatického intervalu
